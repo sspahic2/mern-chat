@@ -6,7 +6,7 @@ import { createEmptyUser } from "../factories/userFactory";
 
 const initialValue = {
   user: createEmptyUser(),
-  setUser: (u: UserFull) => {}
+  setUser: (_: UserFull) => {}
 }
 
 export const AuthContext = createContext<typeof initialValue>(initialValue);

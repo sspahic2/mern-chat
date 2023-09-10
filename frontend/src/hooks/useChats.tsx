@@ -27,7 +27,7 @@ const useChats = (user: UserFull) => {
     setCurrentChat(chat);
   }, [user]);
 
-  const addChatToChats = (chat: ChatFull) => {
+  const addChatToChats = () => {
     getChatsForUser();
   }
 

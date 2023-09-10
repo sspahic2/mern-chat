@@ -31,7 +31,7 @@ const Chat = () => {
   useEffect(() => {
     socket?.on('getChats', (data: ApiResponseChat) => {
       if(data.data.members.includes(user.id))
-        addChatToChats(data.data);
+        addChatToChats();
     });
   }, [socket])
 
