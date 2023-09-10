@@ -6,11 +6,12 @@ import AuthContext from "../context/AuthContext";
 import useChats from "../hooks/useChats";
 import { SocketContext } from "../context/SocketContext";
 import { ChatFull } from "../types/Chat";
+import { ApiResponseChat } from "../types/ApiResponse";
 
 const Chat = () => {
 
   const { user } = useContext(AuthContext);
-  const { chatResponse, isLoading, updateCurrentChat, currentChat } = useChats(user);
+  const { chatResponse, isLoading, updateCurrentChat, currentChat, chats, addChatToChats } = useChats(user);
   const { socket, setOnlineUsers, onlineUsers } = useContext(SocketContext);
 
   useEffect(() => {
@@ -21,16 +22,30 @@ const Chat = () => {
     socket?.on('onlineUsers', (ids: number[]) => {
       setOnlineUsers([...onlineUsers, ...ids]);
     });
+
     return () => {
       socket.off('onlineUsers');
     }
   }, [chatResponse]);
 
+  useEffect(() => {
+    socket?.on('getChats', (data: ApiResponseChat) => {
+      if(data.data.members.includes(user.id))
+        addChatToChats(data.data);
+    });
+  }, [socket])
+
   return (
     <>
       <HStack w={'100%'} h={'100%'} paddingBottom={'10rem'}>
         <Flex w={'30%'} h={'100%'}>
-          <Chats chatResponse={chatResponse} isLoading={isLoading} updateCurrentChat={updateCurrentChat} />
+          <Chats 
+            chatResponse={chatResponse} 
+            isLoading={isLoading} 
+            updateCurrentChat={updateCurrentChat} 
+            chats={chats} 
+            currentChat={currentChat} 
+          />
         </Flex>
         <Flex w={'70%'} h={'100%'}>
           <Messages chat={currentChat} />

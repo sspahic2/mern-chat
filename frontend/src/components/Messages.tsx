@@ -13,7 +13,15 @@ import useScroll from "../hooks/useScroll";
 
 const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
 
-  const { messageResponse, textMessage, sendTextMessage, updateTextMessage, isLoading, addMessageToMessages, messages } = useMessages(chat);
+  const { 
+    messageResponse, 
+    textMessage, 
+    sendTextMessage, 
+    updateTextMessage, 
+    isLoading, 
+    addMessageToMessages, 
+    messages } = useMessages(chat);
+
   const { user } = useContext(AuthContext);
   const { receivingUsers } = userChatUser(chat!, user);
   const { onlineUsers, socket } = useContext(SocketContext);
@@ -93,7 +101,7 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
                 }
                 {
                   messageResponse?.success && messages.map((message: MessageFull) => {
-                    return <Message key={message.createdAt} message={message}/>
+                    return <Message key={message.createdAt! + Math.random()} message={message}/>
                   })
                 }
                 {

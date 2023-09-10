@@ -8,16 +8,18 @@ const useChats = (user: UserFull) => {
   const [chatResponse, setChatResponse] = useState<ApiResponseChat>();
   const [isLoading, setIsLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState<ChatFull | undefined>();
+  const [chats, setChats] = useState<ChatFull[]>([]);
+
+  const getChatsForUser = async() => {
+    setIsLoading(true);
+    let response = await ChatService.getForUser(user);
+
+    setIsLoading(false);
+    setChatResponse(response);
+    setChats(response.data);
+  };
 
   useEffect(() => {
-    const getChatsForUser = async() => {
-      setIsLoading(true);
-      let response = await ChatService.getForUser(user);
-
-      setIsLoading(false);
-      setChatResponse(response);
-    };
-
     getChatsForUser();
   }, [user]);
 
@@ -25,7 +27,11 @@ const useChats = (user: UserFull) => {
     setCurrentChat(chat);
   }, [user]);
 
-  return { chatResponse, isLoading, updateCurrentChat, currentChat };
+  const addChatToChats = (chat: ChatFull) => {
+    getChatsForUser();
+  }
+
+  return { chatResponse, isLoading, updateCurrentChat, currentChat, addChatToChats, chats };
 };
 
 export default useChats;

@@ -5,9 +5,11 @@ import { ChangeEvent, useContext, useMemo } from "react";
 import debounce from "lodash/debounce";
 import SelectedUsers from "./SelectedUsers";
 import AuthContext from "../context/AuthContext";
+import { SocketContext } from "../context/SocketContext";
 
 const ChatModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const { user } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
   const { 
     searchText, 
     updateSearchText, 
@@ -26,7 +28,7 @@ const ChatModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }
   };
 
   const onCreate = async() => {
-    await createChat();
+    socket?.emit('chatCreated', await createChat());
     onClose();
   };
 

@@ -4,7 +4,12 @@ import userChatUser from "../hooks/useChatUser";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-const IndividualChat = ({chat, onClick}: { chat: ChatFull, onClick: (chat: ChatFull) => void }) => {
+const IndividualChat = ({chat, onClick, currentChatId}: 
+  { chat: ChatFull, 
+    onClick: (chat: ChatFull) => void, 
+    currentChatId: number 
+  }) => {
+    
   const { user } = useContext(AuthContext);
   const { receivingUsers } = userChatUser(chat, user);
 
@@ -16,7 +21,7 @@ const IndividualChat = ({chat, onClick}: { chat: ChatFull, onClick: (chat: ChatF
         margin={'auto'} 
         p={5}
         onClick={() => onClick(chat)}
-        bg={'var(--chakra-colors-blackAlpha-400)'}
+        bg={chat.id != currentChatId ? 'var(--chakra-colors-blackAlpha-400)' : 'var(--chakra-colors-blackAlpha-700)'}
         borderRadius={'20px'}
       >
         <Flex mb={4}>

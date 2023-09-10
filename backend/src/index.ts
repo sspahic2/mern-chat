@@ -65,6 +65,14 @@ io.on('connection', (socket) => {
     io.to(`room${message.chatId}`).emit('getMessage', message);
   });
 
+  socket.on('chatCreated', (data: {success: boolean, message: string, data: { id: number, members: number[], createdAt: string }}) => {
+    sockets.forEach((value, key) => {
+      if(data.data.members.includes(value))
+        io.sockets.sockets.get(key)?.join(`room${data.data.id}`);
+    });
+    io.emit('getChats', data);
+  });
+
 });
 
 const port = process.env.PORT || 3000;
