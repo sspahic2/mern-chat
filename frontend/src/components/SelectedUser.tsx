@@ -1,4 +1,4 @@
-import { Flex, HStack, IconButton } from "@chakra-ui/react";
+import { Text, HStack, IconButton } from "@chakra-ui/react";
 import { UserFull } from "../types/User";
 import { CloseIcon } from "@chakra-ui/icons";
 
@@ -6,12 +6,18 @@ const SelectedUser = ({ user, onClick }: { user: UserFull, onClick: (u: UserFull
   return (
     <HStack 
       gap={4} 
-      h={'40px'} 
+      h={'50px'} 
       bg={'#41414B'} 
       borderRadius={'5px'} 
       p={5}
     >
-      <Flex>{user.name}</Flex>
+      <Text
+        overflow={'hidden'}
+        textOverflow={'ellipsis'}
+        whiteSpace={'nowrap'}
+        w={'150px'}
+        h={'40px'}
+      >{user.name}</Text>
       <IconButton 
         size={'xs'} 
         icon={<CloseIcon />} 

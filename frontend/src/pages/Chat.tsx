@@ -1,4 +1,4 @@
-import { Flex, HStack } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import Chats from "../components/Chats";
 import Messages from "../components/Messages";
 import { useContext, useEffect } from "react";
@@ -37,8 +37,8 @@ const Chat = () => {
 
   return (
     <>
-      <HStack w={'100%'} h={'100%'} paddingBottom={'10rem'}>
-        <Flex w={'30%'} h={'100%'}>
+      <Stack direction={{ 'base': 'column', 'lg': 'row' }} w={'100%'} h={{'base': 'auto', 'lg': '100%'}} paddingBottom={{'base': '1rem', 'lg': '10rem'}}>
+        <Flex w={{'base': '100%', 'lg': '30%'}} h={'100%'} margin={'auto'}>
           <Chats 
             chatResponse={chatResponse} 
             isLoading={isLoading} 
@@ -47,10 +47,10 @@ const Chat = () => {
             currentChat={currentChat} 
           />
         </Flex>
-        <Flex w={'70%'} h={'100%'}>
+        <Flex w={{'base': '100%', 'lg': '70%'}} h={'100%'}>
           <Messages chat={currentChat} />
         </Flex>
-      </HStack>
+      </Stack>
     </>
   )
 };

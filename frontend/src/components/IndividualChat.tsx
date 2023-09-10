@@ -9,7 +9,7 @@ const IndividualChat = ({chat, onClick, currentChatId}:
     onClick: (chat: ChatFull) => void, 
     currentChatId: number 
   }) => {
-    
+
   const { user } = useContext(AuthContext);
   const { receivingUsers } = userChatUser(chat, user);
 
@@ -26,24 +26,18 @@ const IndividualChat = ({chat, onClick, currentChatId}:
       >
         <Flex mb={4}>
           <Avatar name={receivingUsers.map((u) => u.name).join(',')} />
-          <VStack ml={3}>
-          <Flex>
-            <Text
-              overflow={'hidden'}
-              textOverflow={'ellipsis'}
-              whiteSpace={'pre-wrap'}
-              w={'200px'}
-              h={'50px'}
-            >
-              {receivingUsers.map((u) => u.name).join(', ')}
-            </Text>
-          </Flex>
-          {/* {
-            lastMessage && 
-            <Flex fontSize={'xs'} justify={'start'} w={'100%'}>
-              { lastMessage?.senderId == user.id ? `You: ${lastMessage.text}` : lastMessage.text }
+          <VStack ml={3} display={{ 'base': 'none', 'md': 'flex' }}>
+            <Flex>
+              <Text
+                overflow={'hidden'}
+                textOverflow={'ellipsis'}
+                whiteSpace={'nowrap'}
+                w={'200px'}
+                h={'50px'}
+              >
+                {receivingUsers.map((u) => u.name).join(', ')}
+              </Text>
             </Flex>
-          } */}
           </VStack>
         </Flex>
       </Flex>

@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Flex, IconButton, VStack, useDisclosure } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Flex, IconButton, Stack, VStack, useDisclosure } from "@chakra-ui/react";
 import { ChatFull } from "../types/Chat";
 import LoadingChats from "./LoadingChats";
 import IndividualChat from "./IndividualChat";
@@ -18,10 +18,10 @@ const Chats = ({ chatResponse, isLoading, updateCurrentChat, chats, currentChat 
   return (
     <>
       <Card
-        w={{'base': '100px', 'md': '400px'}}
+        w={'100%'}
         color={'var(--text-color-red)'}
         bg={'rgba(22,23,31,1)'}
-        h={'100%'}
+        h={{'base': '250px', 'lg': '100%'}}
       >
         <ChatModal isOpen={isOpen} onClose={onClose} />
         <CardHeader textAlign={'center'}>
@@ -38,17 +38,17 @@ const Chats = ({ chatResponse, isLoading, updateCurrentChat, chats, currentChat 
             </Flex>
           </VStack>
         </CardHeader>
-        <CardBody overflowY={'scroll'}>
+        <CardBody overflowY={{'base': 'hidden', 'lg': 'scroll'}} overflowX={{ 'base': 'scroll', 'lg': 'hidden' }}>
           {isLoading &&
             <LoadingChats />
           }
-          <VStack gap={6}>
+          <Stack direction={{'base': 'row', 'lg': 'column'}} gap={6}>
           {
             chatResponse?.success && chats.map((chat: ChatFull) => {
               return <IndividualChat key={chat.id} chat={chat} onClick={updateCurrentChat} currentChatId={currentChat?.id ?? -1}/>
             })
           }
-          </VStack>
+          </Stack>
         </CardBody>
       </Card>
     </>

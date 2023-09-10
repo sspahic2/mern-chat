@@ -35,7 +35,7 @@ const useSearchUsers = (user: UserFull ) => {
   const createChat = async(): Promise<ApiResponseChat> => {
     setSearchResult(undefined);
     setAddedUsers([]);
-    setSearchText('');
+    setSearchText('');  
     return await ChatService.createChat([...addedUsers, user]);
   };
 

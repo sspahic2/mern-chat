@@ -1,4 +1,4 @@
-import { Avatar, AvatarBadge, Card, CardBody, CardHeader, Flex, HStack, IconButton, Input } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Card, CardBody, CardHeader, Flex, HStack, IconButton, Input, Tooltip } from "@chakra-ui/react";
 import { ChatFull } from "../types/Chat";
 import useMessages from "../hooks/useMessages";
 import { MessageFull } from "../types/Message";
@@ -34,7 +34,8 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
 
   const sendMessage = () => {
     sendTextMessage(user);
-    socket?.emit('sendMessage', { senderId: user.id, text: textMessage, chatId: chat?.id });
+    if(textMessage != '')
+      socket?.emit('sendMessage', { senderId: user.id, text: textMessage, chatId: chat?.id });
   }
 
   useEffect(() => {
@@ -53,8 +54,8 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
       <Card
         w={'100%'}
         bg={'var(--chakra-colors-gray-900)'}
-        p={'5rem'}
-        h={'100%'}
+        p={{'base': '1rem', 'lg': '5rem'}}
+        h={{'base': '700px', 'lg': '100%'}}
       >
         {
           (!chat) &&
@@ -75,12 +76,18 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
               >
                 { receivingUsers.map((u) => {
                   return (
-                    <Avatar key={u.id} name={u.name}>
-                      <AvatarBadge 
-                        boxSize={'1em'} 
-                        bg={onlineUsers.some((t) => t == u.id) ?  'green.500' : 'var(--text-color-red)'} 
-                      />
-                    </Avatar>
+                    <Tooltip
+                    label={u.name}
+                    aria-label={u.name}
+                    >
+                      <Avatar key={u.id} name={u.name}>
+                        <AvatarBadge 
+                          boxSize={'1em'} 
+                          bg={onlineUsers.some((t) => t == u.id) ?  'green.500' : 'var(--text-color-red)'} 
+                          
+                        />
+                      </Avatar>
+                    </Tooltip>
                   )
                 })
                 }
@@ -114,7 +121,7 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
                     </Flex>
                 }
               </Flex>
-              <HStack h={'15%'}>
+              <HStack h={{'base': '150px', 'lg': '15%'}}>
                 <Flex w={'100%'}>
                   <Input 
                     type={'text'} 

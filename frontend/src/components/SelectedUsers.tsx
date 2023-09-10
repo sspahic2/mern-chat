@@ -7,6 +7,7 @@ const SelectedUsers = ({ users, removeUser }: { users: UserFull[], removeUser: (
   return (
     <HStack
       overflowX={'auto'}
+      overflowY={'hidden'}
       gap={3}
       w={'100%'}
       h={'80px'}

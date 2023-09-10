@@ -48,7 +48,9 @@ const NavBar = () => {
         m={'auto'}
       >
         <HStack justify={'end'}>
-          <Flex>{user.name} / {user.id}</Flex>
+          { (user && user.name) && 
+            <Flex mr={2}>Hello {user.name}</Flex>
+          }
           {
             routes.map((route) => {
               if(route.condition)
