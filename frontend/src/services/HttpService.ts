@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios"
 import ApiResponse from "../types/ApiResponse";
 
-const baseUrl = import.meta.env.REACT_APP_BACKEND_URL == '' || import.meta.env.REACT_APP_BACKEND_URL == '/' ? 'http://localhost:3000/api' : import.meta.env.REACT_APP_BACKEND_URL;
+const baseUrl = "https://mern-chat-api-jq69.onrender.com/api";//import.meta.env.REACT_APP_BACKEND_URL == '' || import.meta.env.REACT_APP_BACKEND_URL == '/' ? 'http://localhost:3000/api' : import.meta.env.REACT_APP_BACKEND_URL;
 
 const appendSlash = (url: string): string => {
   if(url.at(0) != '/') url = '/' + url;
