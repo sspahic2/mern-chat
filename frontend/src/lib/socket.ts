@@ -1,3 +1,3 @@
-export const URL = import.meta.env.BASE_URL == '' || import.meta.env.BASE_URL == '/' ? 'http://localhost:3000' : import.meta.env.BASE_URL;
+export const URL = import.meta.env.BACKEND_URL_BASE == '' || import.meta.env.BACKEND_URL_BASE == '/' ? 'http://localhost:3000' : import.meta.env.BACKEND_URL_BASE;
 
 // export const newSocket = io(URL, { withCredentials: true, autoConnect: false });
