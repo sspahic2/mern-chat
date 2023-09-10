@@ -8,7 +8,8 @@
     "start": "ts-node src/index.ts",
     "dev": "npx nodemon",
     "install-server": "npm install",
-    "start-server": "ts-node src/index.ts"
+    "start-server": "ts-node src/index.ts",
+    "generate-modals": "npx supabase gen types typescript --linked > src/models/supabase.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.33.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -33,6 +35,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "socket.io": "^4.7.2",
+    "supabase": "^1.93.0",
     "validator": "^13.11.0"
   }
 }

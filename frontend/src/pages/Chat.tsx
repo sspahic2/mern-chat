@@ -30,6 +30,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket?.on('getChats', (data: ApiResponseChat) => {
+      console.log({data});
       if(data.data.members.includes(user.id))
         addChatToChats();
     });

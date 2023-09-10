@@ -1,76 +1,66 @@
+import databaseContext from "../dbcontext/context";
+import { convertToUserModel, convertToUserModelSafe, convertToUserModelSafeArray } from "../factories/userFactory";
 import { encryptPassword } from "../libs/encryption";
 import UserModel, { UserModelFull } from "../models/userModel";
 
-const users: UserModel[] = [
-  {
-    id: 1,
-    name: "Sabahudin Spahic",
-    email: 'test@test.com',
-    password: 'Chat123!',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    salt: 'test'
-  }
-]
+// const users: UserModel[] = [
+//   {
+//     id: 1,
+//     name: "Sabahudin Spahic",
+//     email: 'test@test.com',
+//     password: 'Chat123!',
+//     createdAt: new Date(),
+//     updatedAt: new Date(),
+//     salt: 'test'
+//   }
+// ]
 
-const findMax = () => {
-  let max = -1;
-  users.map((user) => {
-    if(user.id > max)
-      max = user.id;
-  });
-  return max;
-}
+// const findMax = () => {
+//   let max = -1;
+//   users.map((user) => {
+//     if(user.id > max)
+//       max = user.id;
+//   });
+//   return max;
+// }
 
 const UserRepositoryFunction = () => {
   const find = async(email: string): Promise<UserModel | undefined> => {
-    return await new Promise((resolve, reject) => {
-      let user = users.find((user) => {
-        if(user.email == email) return user;
-      });
-      resolve(user);
-    });
+    const { data, error } = await databaseContext.from('user').select().eq('email', email).single();
+
+    if(error) return undefined;
+    return convertToUserModel(data!);
   };
 
   const create = async(newUser: UserModelFull): Promise<UserModel> => {
-    return await new Promise(async (resolve, reject) => {
-      let { salt, password } = await encryptPassword(newUser.password!);
-      let user: UserModel = {
-        id: findMax() + 1,
-        email: newUser.email!,
-        name: newUser.name!,
-        password: password,
-        salt: salt,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-
-      users.push(user);
-      resolve(user);
-    });
+    const { salt, password } = await encryptPassword(newUser.password!);
+    const { data, error } = await databaseContext.from('user').insert({
+      email: newUser.email,
+      name: newUser.name,
+      password: password,
+      salt: salt,
+      updatedAt: new Date().toISOString()
+    }).select().single();
+    if(error) throw error;
+    return convertToUserModel(data);
   };
 
   const findByName = async(name: string): Promise<UserModel[]> => {
-    return await new Promise((resolve, reject) => {
-      return resolve(users.filter((user) => {
-        if(user.name.toLowerCase().includes(name.toLowerCase())) return user;
-      }));
-    });
+    const { data, error } = await databaseContext.from('user').select().ilike('name', `%${name}%`);
+    if(error) throw error;
+    return convertToUserModelSafeArray(data);
   };
 
   const findByID = async(id: number): Promise<UserModel | undefined> => {
-    return await new Promise((resolve, reject) => {
-      let user = users.find((user) => user.id == id);
-      resolve(user);
-    });
+    const { data, error } = await databaseContext.from('user').select().eq('id', id).single();
+    if(error) return undefined;
+    return convertToUserModel(data);
   };
 
   const findAll = async(ids: number[]): Promise<UserModelFull[]> => {
-    return await new Promise((resolve, reject) => {
-      let existingUsers: UserModelFull[] = users.filter((user) => ids.includes(user.id));
-
-      resolve(existingUsers);
-    });
+    const { data, error } = await databaseContext.from('user').select().in('id', ids);
+    if(error) throw error;
+    return convertToUserModelSafeArray(data);
   }
 
   return {

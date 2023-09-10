@@ -1,3 +1,5 @@
+import databaseContext from "../dbcontext/context";
+import { convertToMessageModel, convertToMessageModelArray } from "../factories/messageFactory";
 import MessageModel, { MessageModelFull } from "../models/messageModel";
 
 const messages: MessageModel[] = []
@@ -13,25 +15,23 @@ const findMax = () => {
 
 const MessageRepositoryFunction = () => {
   const create = async(message: MessageModelFull): Promise<MessageModel> => {
-    return await new Promise((resolve, reject) => {
-      let newMessage: MessageModel = {
-        id: findMax() + 1,
-        chatId: message.chatId!,
-        senderId: message.senderId!,
-        text: message.text!,
-        createdAt: new Date()
-      };
+    const { data, error } = await databaseContext.from('message').insert(
+      {
+        chatId: message.chatId,
+        senderId: message.senderId,
+        text: message.text
+      }
+    ).select().single();
 
-      messages.push(newMessage);
-      resolve(newMessage);
-    });
+    if(error) throw error;
+
+    return convertToMessageModel(data);
   };
 
   const findByChatId = async(chatId: number): Promise<MessageModel[]> => {
-    return await new Promise((resolve, reject) => {
-      let existingMessages = messages.filter((msg) => msg.chatId == chatId);
-      resolve(existingMessages);
-    });
+    const { data, error } = await databaseContext.from('message').select().eq('chatId', chatId);
+    if(error) throw error;
+    return convertToMessageModelArray(data);
   }
 
   return {

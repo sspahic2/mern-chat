@@ -79,8 +79,9 @@ const Messages = ({ chat }: { chat: ChatFull | undefined }) => {
                     <Tooltip
                     label={u.name}
                     aria-label={u.name}
+                    key={u.id}
                     >
-                      <Avatar key={u.id} name={u.name}>
+                      <Avatar name={u.name}>
                         <AvatarBadge 
                           boxSize={'1em'} 
                           bg={onlineUsers.some((t) => t == u.id) ?  'green.500' : 'var(--text-color-red)'} 

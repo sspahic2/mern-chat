@@ -1,54 +1,30 @@
+import databaseContext from "../dbcontext/context";
+import { convertToChatModel, convertToChatModelArray } from "../factories/chatFactory";
 import ChatModel, { ChatModelFull } from "../models/chatModel";
-
-const chats: ChatModel[] = [];
-
-const findMax = () => {
-  let max = 0;
-  chats.map((chat) => {
-    if(chat.id > max)
-      max = chat.id;
-  });
-  return max;
-}
 
 const ChatRepositoryFunction = () => {
   const find = async(chat: ChatModelFull): Promise<ChatModel | undefined> => {
-    return await new Promise((resolve, reject) => {
-      let existingChat = chats.find((chatElement) => {
-        let isInFirstList = chat.members?.every((a) => chatElement.members.includes(a));
-        let isInSecondList = chatElement.members.every((b) => chat.members?.includes(b));
-
-        if(isInFirstList && isInSecondList) return chatElement;
-      });
-
-      resolve(existingChat);
-    });
+    const { data, error } = await databaseContext.from('chat').select().eq('members', chat.members!).single();
+    if(error) return undefined;
+    return convertToChatModel(data!);
   };
 
   const create = async(chat: ChatModelFull): Promise<ChatModel> => {
-    return await new Promise((resolve, reject) => {
-      let newChat: ChatModel = {
-        id: findMax() + 1,
-        members: chat.members!,
-        createdAt: new Date()
-      };
-
-      chats.push(newChat);
-      resolve(newChat);
-    });
+    const { data, error } = await databaseContext.from('chat').insert({ members: chat.members }).select().single();
+    if(error) throw error;
+    return convertToChatModel(data!);
   };
 
   const findAllChatsForUser = async(id: number): Promise<ChatModel[]> => {
-    return await new Promise((resolve, reject) => {
-      resolve(chats.filter((chat) => chat.members.includes(id)));
-    });
+    const { data, error } = await databaseContext.from('chat').select().contains('members', `{${id.toString()}}`);
+    if(error) throw error;
+    return convertToChatModelArray(data!);
   };
 
   const findById = async(chatId: number): Promise<ChatModel | undefined> => {
-    return await new Promise((resolve, reject) => {
-      let existingChat = chats.find((chat) => chat.id == chatId);
-      resolve(existingChat);
-    });
+    const { data, error } = await databaseContext.from('chat').select().eq('id', chatId).single();
+    if(error) return undefined;
+    return convertToChatModel(data!);
   };
   return {
     find,
