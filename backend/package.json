@@ -8,7 +8,7 @@
     "start": "ts-node src/index.ts",
     "dev": "npx nodemon",
     "install-server": "npm install --production",
-    "start-server": "ts-node src/index.ts",
+    "start-server": "npx ts-node src/index.ts",
     "generate-modals": "npx supabase gen types typescript --linked > src/models/supabase.ts"
   },
   "keywords": [],
