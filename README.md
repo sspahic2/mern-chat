@@ -2,8 +2,8 @@
 
 Here is the link to the frontend page: [link](https://mern-chat-yeul.vercel.app)
 Here you can find the backend api: [link](https://mern-chat-api-jq69.onrender.com)
-**
-For the frontend side of things:**
+
+**For the frontend side of things:**
 1. Vite was used to create the project
 2. React was used to create the website
 3. ChakraUI was used as a CSS framework
@@ -15,17 +15,25 @@ For the frontend side of things:**
 3. Supabase was used basically as an ORM here and the DB is in Postgresql
 
 **Running locally:**
+
 To run the application locally you need to call run commands for backend and frontend.
+
 Backend: cd backend into the backend folder and then run npm run dev
+
 Frontend: cd frontend into the frontend folder and then run npm run dev
 
-**The maind idea: **Everything was made so it could be replaced with as little changes as needed. 
+**The maind idea:**
+
+Everything was made so it could be replaced with as little changes as needed. 
 If you need to use a different encryption library/jwt generateor/database orm/database structure, then that will require minimal changes.
 Same goes for the frontend. Hooks were actively used and reused in different components/pages and that brought down the complexity of implementation.
 
 **Backend architecture:**
+
 We have here the classic onion architecture.
+
 It goes like this: **route -> controller -> manager -> service -> repository -> database**
+
 The manager layer is there so that most library commands don't have to be run in the service layer, or the controller layer.
 Each layer has their own purpose.
 1. The repository layer is there to be the only entrance into the database. Here we also do the mapping from the database to models that are used in the backend.
